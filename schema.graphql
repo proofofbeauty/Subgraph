@@ -1,22 +1,27 @@
 type Hash @entity {
   id: ID!
-  tokenAddress: String!
-  ownership: [Ownership!]! @derivedFrom(field: "hash")
+  tokenAddress: Bytes!
+  ownership: [HashOwnership!]! @derivedFrom(field: "hash")
+  documents: [HashDocument!]! @derivedFrom(field: "hash") 
+  createdAt: BigInt!
+  removedAt: BigInt!
   hash: String!
-  season: BigInt!
 }
 
-type Ownership @entity {
+type HashOwnership @entity {
   id: ID!
   owner: Bytes!
   hash: Hash!
   quantity: BigInt!
 }
 
-type NftContract @entity {
+type HashDocument @entity {
   id: ID!
-  name: String!
-  symbol: String
-  platform: Platform!
-  nfts: [Nft!]! @derivedFrom(field: "contract")
+  key: String!
+  writer: Bytes!
+  text: String!
+  createdAt: BigInt!
+  hash: Hash!
+  salt: BigInt!
+  signature: Bytes!
 }

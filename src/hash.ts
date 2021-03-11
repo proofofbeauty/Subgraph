@@ -1,27 +1,10 @@
-import { Address } from "@graphprotocol/graph-ts";
-import { TransferSingle, TransferBatch } from "../generated/Rarible/ERC1155";
-import { NftContract } from "../generated/schema"
-import { fetchName, fetchSymbol } from "./mapping";
-import { handleTransferBatch, handleTransferSingle, handleURI } from "./mappings-erc-1155";
+import { TransferSingle, TransferBatch } from "../generated/Hash/ERC1155";
+import { handleTransferBatch, handleTransferSingle } from "./mapping";
 
-export { handleURI };
-
-export function handleTransferSingleRarible(event: TransferSingle): void {
-  ensureNftContract(event.address);
+export function handleTransferSingleHash(event: TransferSingle): void {
   handleTransferSingle(event);
 }
 
-export function handleTransferBatchRarible(event: TransferBatch): void {
-  ensureNftContract(event.address);
+export function handleTransferBatchHash(event: TransferBatch): void {
   handleTransferBatch(event);
-}
-
-function ensureNftContract(address: Address): void{
-  if (NftContract.load(address.toHexString()) == null) {
-    let nftContract = new NftContract(address.toHexString());
-    nftContract.name = fetchName(address);
-    nftContract.symbol = fetchSymbol(address);
-    nftContract.platform = "Rarible";
-    nftContract.save();
-  }
 }
