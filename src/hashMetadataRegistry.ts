@@ -9,7 +9,7 @@ export function handleUpdatedDocument(event: UpdatedDocument): void {
   }
   let hashDocumentId = hashTokenId + '/' + event.params.key.toHexString();
   let hashDocument = HashDocument.load(hashDocumentId);
-  if (hash == null) {
+  if (hashDocument == null) {
     hashDocument = new HashDocument(hashDocumentId);
   } 
   hashDocument.key = event.params.key.toHexString(); // DOES THIS WORK?
