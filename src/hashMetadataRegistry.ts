@@ -7,13 +7,12 @@ export function handleUpdatedDocument(event: UpdatedDocument): void {
   if (hash == null) {
     throw new Error("Hash does not exist");
   }
-  let hashDocumentId = hashTokenId + '/' + event.params.writer + '/' + event.params.key + '/' + event.params.salt + '/' + event.block.timestamp
+  let hashDocumentId = hashTokenId + '/' + event.params.key.toHexString();
   let hashDocument = HashDocument.load(hashDocumentId);
-  if (hash != null) {
-    throw new Error("HashDocument already exists");
+  if (hash == null) {
+    hashDocument = new HashDocument(hashDocumentId);
   } 
-  hashDocument = new HashDocument(hashDocumentId);
-  hashDocument.key = event.params.key.toString(); // DOES THIS WORK?
+  hashDocument.key = event.params.key.toHexString(); // DOES THIS WORK?
   hashDocument.writer = event.params.writer;
   hashDocument.text = event.params.text;
   hashDocument.salt = event.params.salt;
