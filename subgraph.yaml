@@ -21,9 +21,9 @@ dataSources:
           file: ./abis/ERC1155.json
       eventHandlers:
         - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
-          handler: handleTransferSingleHash
-        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferBatchHash
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingleHash
       file: ./src/hash.ts
   - kind: ethereum/contract
     name: HashRegistry

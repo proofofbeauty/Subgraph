@@ -4,8 +4,8 @@ type Hash @entity {
   ownership: [HashOwnership!]! @derivedFrom(field: "hash")
   documents: [HashDocument!]! @derivedFrom(field: "hash") 
   createdAt: BigInt!
-  removedAt: BigInt!
-  hash: String!
+  removedAt: BigInt
+  hash: String
 }
 
 type HashOwnership @entity {
