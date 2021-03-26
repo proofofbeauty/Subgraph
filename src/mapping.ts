@@ -1,7 +1,6 @@
-import { HashOwnership } from "../generated/schema"
 import { Address, BigInt, store } from "@graphprotocol/graph-ts";
 import { ERC1155, TransferBatch, TransferSingle, URI } from "../generated/Hash/ERC1155";
-import { Hash } from "../generated/schema";
+import { Hash, HashOwnership, HashOwner } from "../generated/schema";
 import { BIGINT_ZERO, ZERO_ADDRESS } from "./constants";
 
 export function handleTransferSingle(event: TransferSingle): void {
@@ -35,7 +34,7 @@ export function handleTransferBatch(event: TransferBatch): void {
 }
 
 function transferBase(tokenAddress: Address, from: Address, to: Address, id: BigInt, value: BigInt, timestamp: BigInt): void {
-    let hashTokenId = id.toHexString();
+  let hashTokenId = id.toHexString();
     let hash = Hash.load(hashTokenId);
     if (hash == null) {
         // TODO: map hash in
@@ -61,7 +60,6 @@ function transferBase(tokenAddress: Address, from: Address, to: Address, id: Big
 export function updateHashOwnership(tokenId: string, owner: Address, deltaQuantity: BigInt): void {
   let ownershipId = tokenId + "/" + owner.toHexString();
   let ownership = HashOwnership.load(ownershipId);
-
   if (ownership == null) {
     ownership = new HashOwnership(ownershipId);
     ownership.hash = tokenId;
@@ -81,4 +79,22 @@ export function updateHashOwnership(tokenId: string, owner: Address, deltaQuanti
     ownership.quantity = newQuantity;
     ownership.save();
   }
+
+  let ownerEntity = HashOwner.load(owner.toHexString());
+  if (ownerEntity == null) {
+    ownerEntity = new HashOwner(owner.toHexString());
+    ownerEntity.totalQuantity = BIGINT_ZERO;
+  }
+  let newTotalQuantity = ownerEntity.totalQuantity.plus(deltaQuantity);
+
+  if (newTotalQuantity.lt(BIGINT_ZERO)) {
+    throw new Error("Negative token quantity")
+  }
+
+  if (newTotalQuantity.isZero()) {
+    store.remove('HashOwner', owner.toHexString());
+  } else {
+    ownerEntity.totalQuantity = newTotalQuantity;
+    ownerEntity.save();
+  } 
 }

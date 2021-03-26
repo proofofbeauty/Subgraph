@@ -25,3 +25,13 @@ type HashDocument @entity {
   salt: BigInt!
   signature: Bytes!
 }
+
+type HashOwner @entity {
+  id: ID!
+  totalQuantity: BigInt!
+}
+
+type HashMaxIndex @entity {
+  id: ID!
+  maxIndex: BigInt!
+}
