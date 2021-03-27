@@ -17,6 +17,7 @@ dataSources:
         - Hash
         - HashOwnership
         - HashOwner
+        - HashMaxIndex
       abis:
         - name: ERC1155
           file: ./abis/ERC1155.json

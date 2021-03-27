@@ -1,5 +1,5 @@
 import { TransferSingle, TransferBatch } from "../generated/Hash/ERC1155";
-import { handleTransferBatch, handleTransferSingle } from "./mapping";
+import { handleTransferSingle, handleTransferBatch } from "./mapping";
 
 export function handleTransferSingleHash(event: TransferSingle): void {
   handleTransferSingle(event);

@@ -1,7 +1,8 @@
 import { Address, BigInt, store } from "@graphprotocol/graph-ts";
-import { ERC1155, TransferBatch, TransferSingle, URI } from "../generated/Hash/ERC1155";
-import { Hash, HashOwnership, HashOwner } from "../generated/schema";
+import { TransferSingle, TransferBatch } from "../generated/Hash/ERC1155";
+import { Hash, HashOwner, HashOwnership, HashMaxIndex } from "../generated/schema";
 import { BIGINT_ZERO, ZERO_ADDRESS } from "./constants";
+import { getTokenType } from "./utils";
 
 export function handleTransferSingle(event: TransferSingle): void {
     transferBase(
@@ -18,7 +19,6 @@ export function handleTransferBatch(event: TransferBatch): void {
     if (event.params._ids.length != event.params._values.length) {
         throw new Error("Inconsistent arrays length in TransferBatch");
     }
-
     for (let i = 0; i < event.params._ids.length; i++) {
         let ids = event.params._ids;
         let values = event.params._values;
@@ -35,21 +35,32 @@ export function handleTransferBatch(event: TransferBatch): void {
 
 function transferBase(tokenAddress: Address, from: Address, to: Address, id: BigInt, value: BigInt, timestamp: BigInt): void {
   let hashTokenId = id.toHexString();
-    let hash = Hash.load(hashTokenId);
-    if (hash == null) {
-        // TODO: map hash in
-        let contract = ERC1155.bind(tokenAddress);
-        hash = new Hash(hashTokenId);
-        hash.tokenAddress = tokenAddress;
-        hash.createdAt = timestamp;
-        hash.save();
-    }
+  let hash = Hash.load(hashTokenId);
+  if (hash == null) {
+      // TODO: map hash in
+      hash = new Hash(hashTokenId);
+      hash.tokenAddress = tokenAddress;
+      hash.createdAt = timestamp;
+      hash.save();
+  }
 
-    if (to == ZERO_ADDRESS) {
-        // burn token
-        hash.removedAt = timestamp;
-        hash.save();
+  if (to == ZERO_ADDRESS) {
+      // burn token
+      hash.removedAt = timestamp;
+      hash.save();
+  }
+
+  if (from == ZERO_ADDRESS) {
+    // mint token
+    let tokenType = getTokenType(hashTokenId);
+    let maxIndex = HashMaxIndex.load(tokenType) 
+    if (maxIndex == null) {
+      maxIndex = new HashMaxIndex(tokenType);
+      maxIndex.maxIndex = BIGINT_ZERO;
     }
+    maxIndex.maxIndex = maxIndex.maxIndex.plus(value);
+    maxIndex.save(); 
+  }
 
     if (from != ZERO_ADDRESS) {
       updateHashOwnership(hashTokenId, from, BIGINT_ZERO.minus(value));

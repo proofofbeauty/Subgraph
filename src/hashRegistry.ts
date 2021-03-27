@@ -1,8 +1,8 @@
 import { UpdatedRegistry } from "../generated/HashRegistry/HashRegistry";
 import { Hash } from "../generated/schema";
 
-function padHexString(str: string, length: number = 64): string {
-  return `0x${str.slice(2).padStart(length, '0')}`;
+function padHexString(str: string): string {
+  return "0x" + str.slice(2).padStart(64, '0');
 }
 
 export function handleUpdatedRegistry(event: UpdatedRegistry): void {
@@ -11,6 +11,6 @@ export function handleUpdatedRegistry(event: UpdatedRegistry): void {
   if (hash == null) {
     throw new Error("Hash does not exist");
   }
-  hash.hash = event.params.txHash.toHexString();
+  hash.hash = padHexString(event.params.txHash.toHexString());
   hash.save();
 }
