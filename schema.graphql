@@ -35,3 +35,22 @@ type HashMaxIndex @entity {
   id: ID!
   maxIndex: BigInt!
 }
+
+type HashAffirmedDocument @entity {
+  id: ID!
+  key: String!
+  writer: Bytes!
+  text: String!
+  createdAt: BigInt!
+  hash: Hash!
+  affirmations: [HashAffirmation!]! @derivedFrom(field: "document")
+}
+
+type HashAffirmation @entity {
+  id: ID!
+  document: HashAffirmedDocument
+  signature: Bytes! 
+  signer: Bytes!
+  salt: BigInt!
+  createdAt: BigInt!
+}
