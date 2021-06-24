@@ -11,7 +11,8 @@ export function handleTransferSingle(event: TransferSingle): void {
         event.params._to,
         event.params._id,
         event.params._value,
-        event.block.timestamp
+        event.block.timestamp,
+        event.block.number
     );
 }
 
@@ -28,12 +29,13 @@ export function handleTransferBatch(event: TransferBatch): void {
             event.params._to,
             ids[i],
             values[i],
-            event.block.timestamp
+            event.block.timestamp,
+            event.block.number
         );
     }
 }
 
-function transferBase(tokenAddress: Address, from: Address, to: Address, id: BigInt, value: BigInt, timestamp: BigInt): void {
+function transferBase(tokenAddress: Address, from: Address, to: Address, id: BigInt, value: BigInt, timestamp: BigInt, blockNumber: BigInt): void {
   let hashTokenId = id.toHexString();
   let hash = Hash.load(hashTokenId);
   if (hash == null) {
@@ -41,6 +43,8 @@ function transferBase(tokenAddress: Address, from: Address, to: Address, id: Big
       hash = new Hash(hashTokenId);
       hash.tokenAddress = tokenAddress;
       hash.createdAt = timestamp;
+      hash.createdBy = to;
+      hash.createdAtBlockNum = blockNumber;
       hash.save();
   }
 

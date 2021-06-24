@@ -2,8 +2,11 @@ type Hash @entity {
   id: ID!
   tokenAddress: Bytes!
   ownership: [HashOwnership!]! @derivedFrom(field: "hash")
-  documents: [HashDocument!]! @derivedFrom(field: "hash") 
+  documents: [HashDocument!]! @derivedFrom(field: "hash")
+  affirmedDocuments: [HashAffirmedDocument!]! @derivedFrom(field: "hash")  
   createdAt: BigInt!
+  createdAtBlockNum: BigInt!
+  createdBy: Bytes!
   removedAt: BigInt
   hash: String
 }
