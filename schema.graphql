@@ -24,9 +24,9 @@ type HashDocument @entity {
   writer: Bytes!
   text: String!
   createdAt: BigInt!
-  hash: Hash!
-  salt: BigInt!
-  signature: Bytes!
+  hash: Hash
+  fee: BigInt
+  signature: Bytes
 }
 
 type HashOwner @entity {

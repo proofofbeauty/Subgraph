@@ -3,5 +3,6 @@ import { BigDecimal, BigInt, Address, ByteArray, Bytes } from "@graphprotocol/gr
 // Platform contract addresses
 export let ZERO_ADDRESS = Address.fromString("0x0000000000000000000000000000000000000000");
 export let BIGINT_ZERO = BigInt.fromI32(0);
+export let EMPTY_BYTES = Bytes.fromHexString("0x00");
 export let BIGINT_ONE = BigInt.fromI32(1);
 export let BIGDECIMAL_ZERO = new BigDecimal(BIGINT_ZERO);

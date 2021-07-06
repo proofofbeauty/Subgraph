@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ proofofbeauty/Hash",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ proofofbeauty/hashv2",
     "deploy-rinkeby": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ proofofbeauty/hash-rinkeby ./subgraph.rinkeby.yaml",
     "create-local": "graph create --node http://localhost:8020/ proofofbeauty/Subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ proofofbeauty/Subgraph",
