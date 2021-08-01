@@ -2,7 +2,8 @@ import { UpdatedDocument } from "../generated/MetadataRegistry/MetadataRegistry"
 import { WroteSignedText } from "../generated/SignedTextMetadataWriter/SignedTextMetadataWriter";
 
 import { Hash, HashDocument } from "../generated/schema";
-import { BIGINT_ZERO, EMPTY_BYTES } from "./constants";
+import { METADATA_REGISTRY, EMPTY_BYTES } from "./constants";
+import { handleHashUpdatedMetadata } from "./hashHistory";
 
 export function handleWriteDocument(event: UpdatedDocument): void {
   let hashTokenId = event.params.tokenId.toHexString();
@@ -18,6 +19,7 @@ export function handleWriteDocument(event: UpdatedDocument): void {
   hashDocument.hash = hashTokenId;
   hashDocument.createdAt = event.block.timestamp;
   hashDocument.save();
+  handleHashUpdatedMetadata(event.params.tokenId, METADATA_REGISTRY, event.params.key, event.params.text, event.params.writer, event.block.timestamp, event.block.number)
 }
 
 export function handleWroteSignedText(event: WroteSignedText): void {
@@ -36,4 +38,5 @@ export function handleWroteSignedText(event: WroteSignedText): void {
   hashDocument.signature = event.params.signature;
   hashDocument.fee = event.params.fee;
   hashDocument.save();
+  handleHashUpdatedMetadata(event.params.tokenId, METADATA_REGISTRY, event.params.key, event.params.text, event.params.writer, event.block.timestamp, event.block.number)
 }

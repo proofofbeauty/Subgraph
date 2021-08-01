@@ -60,6 +60,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - HashAffirmedDocument
+        - HashHistoryUpdatedMetdata
       abis:
         - name: PermissionedTokenMetadataRegistry
           file: ./abis/PermissionedTokenMetadataRegistry.json
@@ -100,6 +101,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - HashDocument
+        - HashHistoryUpdatedMetdata
       abis:
         - name: MetadataRegistry
           file: ./abis/MetadataRegistry.json
@@ -120,6 +122,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - HashDocument
+        - HashHistoryUpdatedMetdata
       abis:
         - name: SignedTextMetadataWriter
           file: ./abis/SignedTextMetadataWriter.json

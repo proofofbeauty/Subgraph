@@ -6,3 +6,6 @@ export let BIGINT_ZERO = BigInt.fromI32(0);
 export let EMPTY_BYTES = Bytes.fromHexString("0x00");
 export let BIGINT_ONE = BigInt.fromI32(1);
 export let BIGDECIMAL_ZERO = new BigDecimal(BIGINT_ZERO);
+
+export let METADATA_REGISTRY = Address.fromString("0x468Cd53A86a5F00261487888aa0C5d48f25901d0");
+export let HISTORIAN_METADATA_REGISTRY = Address.fromString("0x7e79289de44392982a84380A764CCFA86c8C0E79");

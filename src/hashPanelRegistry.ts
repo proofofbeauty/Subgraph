@@ -2,6 +2,8 @@ import { UpdatedDocument } from "../generated/PermissionedTokenMetadataRegistry/
 import { Affirmed } from "../generated/SnapshotAffirmationVerifier/SnapshotAffirmationVerifier";
 
 import { Hash, HashAffirmation, HashAffirmedDocument } from "../generated/schema";
+import { handleHashUpdatedMetadata } from "./hashHistory";
+import { HISTORIAN_METADATA_REGISTRY } from "./constants";
 
 export function handleUpdatedDocument(event: UpdatedDocument): void {
   let hashTokenId = event.params.tokenId.toHexString();
@@ -20,6 +22,7 @@ export function handleUpdatedDocument(event: UpdatedDocument): void {
   hashDocument.hash = event.params.tokenId.toHexString();
   hashDocument.createdAt = event.block.timestamp;
   hashDocument.save();
+  handleHashUpdatedMetadata(event.params.tokenId, HISTORIAN_METADATA_REGISTRY, event.params.key, event.params.text, event.transaction.from, event.block.timestamp, event.block.number)
 }
 
 export function handleAffirmation(event: Affirmed): void {

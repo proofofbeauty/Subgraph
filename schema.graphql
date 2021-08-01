@@ -9,6 +9,7 @@ type Hash @entity {
   createdBy: Bytes!
   removedAt: BigInt
   hash: String
+  metadataHistory: [HashHistoryUpdatedMetdata!]! @derivedFrom(field: "hash")
 }
 
 type HashOwnership @entity {
@@ -27,6 +28,17 @@ type HashDocument @entity {
   hash: Hash
   fee: BigInt
   signature: Bytes
+}
+
+type HashHistoryUpdatedMetdata @entity {
+  id: ID!
+  key: String!
+  text: String!
+  metadataRepository: Bytes!
+  writer: Bytes!
+  createdAt: BigInt!
+  createdAtBlockNum: BigInt!
+  hash: Hash
 }
 
 type HashOwner @entity {
@@ -48,6 +60,7 @@ type HashAffirmedDocument @entity {
   hash: Hash!
   affirmations: [HashAffirmation!]! @derivedFrom(field: "document")
 }
+
 
 type HashAffirmation @entity {
   id: ID!
