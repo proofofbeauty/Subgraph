@@ -1,7 +1,7 @@
 import { UpdatedDocument } from "../generated/PermissionedTokenMetadataRegistry/PermissionedTokenMetadataRegistry";
-import { Affirmed } from "../generated/SnapshotAffirmationVerifier/SnapshotAffirmationVerifier";
+import { Affirmed, Tipped } from "../generated/SnapshotAffirmationVerifier/SnapshotAffirmationVerifier";
 
-import { Hash, HashAffirmation, HashAffirmedDocument } from "../generated/schema";
+import { HashTip, Hash, HashAffirmation, HashAffirmedDocument } from "../generated/schema";
 import { handleHashUpdatedMetadata } from "./hashHistory";
 import { HISTORIAN_METADATA_REGISTRY } from "./constants";
 
@@ -16,7 +16,7 @@ export function handleUpdatedDocument(event: UpdatedDocument): void {
   if (hashDocument == null) {
     hashDocument = new HashAffirmedDocument(hashDocumentId);
   } 
-  hashDocument.key = event.params.key.toHexString(); // DOES THIS WORK?
+  hashDocument.key = event.params.key.toHexString();
   hashDocument.writer = event.params.writer;
   hashDocument.text = event.params.text;
   hashDocument.hash = event.params.tokenId.toHexString();
@@ -40,4 +40,16 @@ export function handleAffirmation(event: Affirmed): void {
   affirmed.document = hashDocumentId;
   affirmed.createdAt = event.block.timestamp;
   affirmed.save();
+}
+
+
+export function handleTip(event: Tipped): void {
+  let tip = HashTip.load(event.params.writeHash.toHexString());
+  if (tip == null) {
+    tip = new HashTip(event.params.writeHash.toHexString());
+  } 
+
+  tip.tipper = event.params.tipper;
+  tip.value = event.params.value;
+  tip.save();
 }

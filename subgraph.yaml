@@ -69,7 +69,7 @@ dataSources:
           handler: handleUpdatedDocument
       file: ./src/hashPanelRegistry.ts
   - kind: ethereum/contract
-    name: SnapshotAffirmationVerifier
+    name: OldSnapshotAffirmationVerifier
     network: mainnet
     source:
       address: "0xA0FFF5ecFab911b8A000eE377A0C31c0052Adf5D"
@@ -87,6 +87,28 @@ dataSources:
       eventHandlers:
         - event: Affirmed(indexed uint256,indexed address,indexed string,bytes32,uint256,bytes)
           handler: handleAffirmation
+      file: ./src/hashPanelRegistry.ts
+  - kind: ethereum/contract
+    name: SnapshotAffirmationVerifier
+    network: mainnet
+    source:
+      address: "0xa2D3fC91D69dB454C58Dbd5e70b229eE35F6dB09"
+      abi: SnapshotAffirmationVerifier
+      startBlock: 13072124
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - HashAffirmation
+      abis:
+        - name: SnapshotAffirmationVerifier
+          file: ./abis/SnapshotAffirmationVerifier.json
+      eventHandlers:
+        - event: Affirmed(indexed uint256,indexed address,indexed string,bytes32,uint256,bytes)
+          handler: handleAffirmation
+        - event: Tipped(indexed bytes32,indexed address,uint256,bytes)
+          handler: handleTip
       file: ./src/hashPanelRegistry.ts
   - kind: ethereum/contract
     name: MetadataRegistry

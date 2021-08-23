@@ -61,6 +61,12 @@ type HashAffirmedDocument @entity {
   affirmations: [HashAffirmation!]! @derivedFrom(field: "document")
 }
 
+type HashTip @entity {
+  id: ID!
+  tipper: Bytes!
+  value: BigInt!
+}
+
 
 type HashAffirmation @entity {
   id: ID!

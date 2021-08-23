@@ -3,8 +3,33 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_accessControl",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
         "name": "_permissionedTokenMetadataRegistry",
         "type": "address"
+      },
+      {
+        "internalType": "address payable",
+        "name": "_historianTipJar",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_tipToken",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_organizerRole",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_historianRole",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "nonpayable",
@@ -57,25 +82,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": false,
         "internalType": "address",
         "name": "account",
@@ -83,6 +89,37 @@
       }
     ],
     "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "writeHash",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "tipper",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "Tipped",
     "type": "event"
   },
   {
@@ -97,6 +134,32 @@
     ],
     "name": "Unpaused",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "VERSION",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "accessControl",
+    "outputs": [
+      {
+        "internalType": "contract IAccessControl",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [
@@ -164,6 +227,52 @@
         "components": [
           {
             "internalType": "uint256",
+            "name": "version",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "writeHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "tipper",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct SnapshotAffirmationWriter.Tip",
+        "name": "_tip",
+        "type": "tuple"
+      }
+    ],
+    "name": "getTipHash",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
             "name": "tokenId",
             "type": "uint256"
           },
@@ -197,6 +306,32 @@
       }
     ],
     "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "historianRole",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "historianTipJar",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -253,12 +388,12 @@
   },
   {
     "inputs": [],
-    "name": "owner",
+    "name": "organizerRole",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "bytes32",
         "name": "",
-        "type": "address"
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -285,25 +420,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "permissedAffirmers",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "permissionedTokenMetadataRegistry",
     "outputs": [
@@ -317,8 +433,46 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "renounceOwnership",
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "writeHash",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "version",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "writeHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "tipper",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct SnapshotAffirmationWriter.Tip",
+        "name": "_tip",
+        "type": "tuple"
+      }
+    ],
+    "name": "settleTip",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -355,19 +509,51 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "newOwner",
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "tipHashRegistry",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tipToken",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "_historianTipJar",
+        "type": "address"
+      }
+    ],
+    "name": "updateHistorianTipJar",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -381,24 +567,6 @@
       }
     ],
     "name": "updateMinimumQuorumAffirmations",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_affirmer",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "status",
-        "type": "bool"
-      }
-    ],
-    "name": "updatePermissedAffirmersStatus",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -434,6 +602,52 @@
       }
     ],
     "name": "verifyAffirmation",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "version",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "writeHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "tipper",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct SnapshotAffirmationWriter.Tip",
+        "name": "_tip",
+        "type": "tuple"
+      }
+    ],
+    "name": "verifyTip",
     "outputs": [
       {
         "internalType": "bool",
@@ -494,6 +708,38 @@
         "internalType": "struct SnapshotAffirmationWriter.Affirmation[]",
         "name": "_affirmations",
         "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "version",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "writeHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "tipper",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct SnapshotAffirmationWriter.Tip",
+        "name": "_tip",
+        "type": "tuple"
       }
     ],
     "name": "write",
